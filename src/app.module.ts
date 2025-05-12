@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_PIPE } from '@nestjs/core';
 import { ArtistModule } from './artist/artist.module';
 import { dataSourceOptions } from 'db/data-source';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { dataSourceOptions } from 'db/data-source';
     UserModule,
     AuthModule,
     ArtistModule,
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [
