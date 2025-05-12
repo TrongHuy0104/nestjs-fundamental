@@ -1,15 +1,22 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  RequestMethod,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SongsModule } from './songs/songs.module';
-import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
-import { Song } from './entity/songs.entity';
-import { Artist } from './entity/artist.entity';
-import { User } from './entity/user.entity';
+import { Song } from './songs/songs.entity';
+import { User } from './user/user.entity';
 import { PlaylistModule } from './playlist/playlist.module';
-import { Playlist } from './entity/playlist.entity';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { APP_PIPE } from '@nestjs/core';
+import { ArtistModule } from './artist/artist.module';
+import { Artist } from './artist/artist.entity';
+import { Playlist } from './playlist/playlist.entity';
 
 @Module({
   imports: [
@@ -25,19 +32,27 @@ import { Playlist } from './entity/playlist.entity';
       synchronize: true,
     }),
     PlaylistModule,
+    UserModule,
+    AuthModule,
+    ArtistModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+  ],
 })
 export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(LoggerMiddleware)
-      .exclude({ path: 'songs', method: RequestMethod.GET })
-      .forRoutes('songs');
-  }
-
-  constructor(private dataSource: DataSource) {
-    console.log(dataSource.driver.database);
-  }
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer
+  //     .apply(LoggerMiddleware)
+  //     .exclude({ path: 'songs', method: RequestMethod.GET })
+  //     .forRoutes('songs');
+  // }
+  // constructor(private dataSource: DataSource) {
+  //   console.log(dataSource.driver.database);
+  // }
 }

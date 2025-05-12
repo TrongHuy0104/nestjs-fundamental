@@ -12,16 +12,19 @@ import {
   Put,
   Query,
   UseFilters,
+  UseGuards,
 } from '@nestjs/common';
 import { SongsService } from './songs.service';
 import { HttpExceptionFilter } from 'src/common/middleware/logger/http-exception.filter';
-import { CreateSongDto } from 'src/dto/create-songs.dto';
-import { UpdateSongDto } from 'src/dto/update-songs.dto';
+import { CreateSongDto } from 'src/songs/dto/create-songs.dto';
+import { UpdateSongDto } from 'src/songs/dto/update-songs.dto';
+import { JwtArtistGuard } from 'src/auth/jwt-artist.guard';
 
 @Controller('songs')
 export class SongsController {
   constructor(private readonly songsService: SongsService) {}
   @Post()
+  @UseGuards(JwtArtistGuard)
   create(@Body() createSongsDTO: CreateSongDto) {
     return this.songsService.create(createSongsDTO);
   }

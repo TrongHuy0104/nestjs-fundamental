@@ -1,3 +1,5 @@
+import { Song } from 'src/songs/songs.entity';
+import { User } from 'src/user/user.entity';
 import {
   Entity,
   JoinColumn,
@@ -5,8 +7,6 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './user.entity';
-import { Song } from './songs.entity';
 
 @Entity('artists')
 export class Artist {
