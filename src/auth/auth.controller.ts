@@ -8,14 +8,21 @@ import { JwtAuthGuard } from './jwt.guard';
 import { UpdateResult } from 'typeorm';
 import { ValidateTokenDTO } from './dto/validate-token.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(
     private userService: UserService,
     private authService: AuthService,
   ) {}
   @Post('signup')
+  @ApiOperation({ summary: 'Register new user' })
+  @ApiResponse({
+    status: 201,
+    description: 'It will return the user in the response',
+  })
   signup(
     @Body()
     userDTO: CreateUserDTO,
@@ -24,6 +31,11 @@ export class AuthController {
   }
 
   @Post('signin')
+  @ApiOperation({ summary: 'Login user' })
+  @ApiResponse({
+    status: 200,
+    description: 'It will give you the access_token in the response',
+  })
   signin(@Body() loginDTO: LoginDTO) {
     return this.authService.login(loginDTO);
   }
