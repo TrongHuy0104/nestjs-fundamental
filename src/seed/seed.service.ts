@@ -7,21 +7,21 @@ export class SeedService {
   constructor(private readonly connection: DataSource) {}
 
   async seed(): Promise<void> {
-    const queryRunner = this.connection.createQueryRunner(); //1
+    const queryRunner = this.connection.createQueryRunner();
 
-    await queryRunner.connect(); //2
-    await queryRunner.startTransaction(); //3
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
     try {
       const manager = queryRunner.manager;
       await seedData(manager);
 
-      await queryRunner.commitTransaction(); //4
+      await queryRunner.commitTransaction();
     } catch (err) {
       console.log('Error during database seeding:', err);
-      await queryRunner.rollbackTransaction(); // 5
+      await queryRunner.rollbackTransaction();
     } finally {
-      await queryRunner.release(); //6
+      await queryRunner.release();
     }
   }
 }
